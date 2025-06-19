@@ -51,7 +51,7 @@ CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
  
 
 # Set up Google GenerativeAI with your API key
-genai.configure(api_key="AIzaSyAWxcKRaX_sDPqlrqPZv2yGRiHXlPZXLRY")
+genai.configure(api_key=os.environ.get('GEMINI_API_KEY'))
  
 
 # Initialize the NLP pipeline for sentence segmentation
@@ -60,7 +60,7 @@ model = AutoModelForTokenClassification.from_pretrained("jean-baptiste/roberta-l
 nlp = pipeline("ner", model=model, tokenizer=tokenizer, aggregation_strategy="simple")
 
 # Initialize Gemini Pro
-llm = GoogleGenerativeAI(model="gemini-flash", google_api_key="AIzaSyAWxcKRaX_sDPqlrqPZv2yGRiHXlPZXLRY", temperature=0.5)
+llm = GoogleGenerativeAI(model="gemini-flash", google_api_key=os.environ.get('GEMINI_API_KEY'), temperature=0.5)
 logger.debug("Gemini Pro LLM initialized with temperature 0.5")
 
 # Global variables
