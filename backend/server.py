@@ -171,16 +171,14 @@ def formatTimestamp(seconds):
     return f"{minutes:02d}:{secs:02d}"
  
 
-def generate_answer_progress(user_question, transcript):
+def generate_answer_progress(user_question):
     try:
         logger.debug("Starting anwer generation")
         # yield "data: " + json.dumps({"progress": 10, "status": "Preparing answer"}) + "\n\n"
-
-        full_text = " ".join(chunk['text'] for chunk in transcript)
-        
+ 
         # Enhanced context retrieval with English language instruction
         prompt = f"""You are an AI assistant analyzing a csv dataset of CRM data.
-    Provide a clear and detailed answer in English to the following question: "{user_message}" 
+    Provide a clear and detailed answer in English to the following question: "{user_question}" 
          
     The dataset is as follows:
 ```sales_pipeline.csv
@@ -426,9 +424,10 @@ Zane Levy,Summer Sewald,West
 Maureen Marcano,Summer Sewald,West
 Carl Lin,Summer Sewald,West
 ``` 
+In the answer text just give me plain text without double asterisks to highlight some text in bold style. I do not need that!!!
 """
 
-        model = genai.GenerativeModel('gemini-pro')
+        model = genai.GenerativeModel('gemini-2.0-flash-001')
         response = model.generate_content(prompt)
         generated_summary = response.text
 
@@ -480,7 +479,7 @@ def question_answer():
     if not transcript:
         return jsonify({'error': 'No transcript provided'}), 400
 
-    return generate_answer_progress(user_question, transcript)
+    return generate_answer_progress(user_question)
 
     
 def simple_sentence_tokenize(text):

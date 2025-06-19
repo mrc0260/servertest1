@@ -12,9 +12,8 @@ import remarkGfm from 'remark-gfm'
 import LoadingDots from '@/components/LoadingDots'
 import { ChevronDown, ChevronUp, Search } from 'lucide-react';
 import YouTube from 'react-youtube';
-
-const API_URL_PROD: String = 'https://ta-python-v1.onrender.com/api';
-const API_URL_DEV: String = 'http://localhost:8080/api';
+ 
+const API_URL_DEV: String = 'http://127.0.0.1:8080/api';
 const API_URL: String = API_URL_DEV;
 
 // Define the Step type
@@ -437,7 +436,7 @@ function Page() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: currentInput, transcript: transcript }),
+        body: JSON.stringify({ message: currentInput }),
       });
 
       if (!response.ok) {
@@ -464,7 +463,7 @@ function Page() {
       console.error('Error in chat:', error);
       setChatMessages(prev => [...prev, {
         role: 'assistant',
-        content: 'I apologize, but I encountered an error while processing your request.'
+        content: 'I apologize but I encountered an error while processing your request.'
       }]);
     } finally {
       setIsAiResponding(false);
@@ -557,92 +556,11 @@ function Page() {
   }, [chatMessages, isAiResponding]); // Add isAiResponding to dependencies
 
   return (
-    <div className="flex h-screen">
-      <div className="w-[40%] flex flex-col bg-white overflow-hidden">
-        <div className="p-6 pb-4 pr-12">
-          <div className="flex items-center mb-4">
-            <h2 className="text-xl font-bold text-gray-800 mr-4">TRANSCRIPT</h2>
-            <form onSubmit={handleTranscriptSubmit} className="flex-grow">
-              <div className="flex items-center bg-white rounded-[15px] overflow-hidden border border-gray-300">
-                <Input
-                  type="text"
-                  value={videoUrl}
-                  onChange={(e) => setVideoUrl(e.target.value)}
-                  placeholder="Enter YouTube Video URL"
-                  className="flex-grow h-10 text-sm focus:ring-0 focus:outline-none border-none rounded-none text-black" 
-                />
-                <Button 
-                  type="submit" 
-                  disabled={transcriptLoading}
-                  className="h-10 px-4 text-sm focus:ring-0 focus:outline-none bg-[#3180DB] hover:bg-[#2670CB] text-white rounded-none" 
-                >
-                  {transcriptLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                  {transcriptLoading ? 'Processing...' : 'Transcribe'}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-        
-        {videoId && (
-          <div className="px-8 mb-4">
-            <div className="max-w-[500px] mx-auto">
-              <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
-                <div className="absolute top-0 left-0 w-full h-full rounded-xl overflow-hidden">
-                  <YouTube
-                    videoId={videoId}
-                    opts={opts}
-                    onReady={onReady}
-                    className="w-full h-full"
-                    iframeClassName="w-full h-full"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+     <div className="flex h-screen"> 
 
-        <ScrollArea className="flex-grow px-6 custom-scrollbar" ref={transcriptRef}>
-          <div className="pr-2 pl-2">
-            <AnimatePresence>
-              {transcript.map((entry) => (
-                <motion.div
-                  key={entry.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Card 
-                    className={`mb-5 transcript-entry hover:bg-gray-50 transition-colors duration-200 rounded-[15px] border border-gray-200 shadow-[0_0_8px_rgba(0,0,0,0.05)] ${
-                      entry.id === highlightedEntryId ? 'bg-blue-50' : 'bg-white'
-                    }`} 
-                    data-id={entry.id}
-                  >
-                    <CardContent className="p-4 flex items-start">
-                      <div className="flex items-center space-x-2 mr-4 flex-shrink-0">
-                        <button 
-                          className="px-2 py-1 bg-[#3180DB] bg-opacity-60 text-white text-xs rounded-[4px] hover:bg-opacity-100 transition-opacity"
-                          onClick={() => handleTimestampClick(entry.start, entry.duration)}
-                        >
-                          {formatTimestamp(entry.start)}
-                        </button>
-                      </div>
-                      <span className="text-sm text-black flex-grow pr-2">
-                        {entry.text}
-                      </span>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-        </ScrollArea>
-      </div>
-
-      <div className="w-[60%] flex flex-col h-screen bg-neutral-100">
+      <div className="w-[100%] flex flex-col h-screen bg-neutral-100">
         <div className="p-8 flex flex-col h-full">
-          <h2 className="text-2xl font-bold mb-4 text-black text-center">CHATBOT</h2>
+          <h2 className="text-2xl font-bold mb-4 text-black text-center">Data Insights Agent</h2>
           
           <ScrollArea 
             className="flex-grow mb-6 pr-4" 
@@ -757,22 +675,22 @@ function Page() {
           <div className="space-y-4">
             {/* Summarize and Make Notes buttons */}
             <div className="flex space-x-3">
-              <Button 
+              {/* <Button 
                 onClick={handleSummarySubmit} 
                 disabled={summaryLoading || notesLoading}
                 className="h-10 px-4 text-sm focus:ring-0 focus:outline-none bg-[#3180DB] hover:bg-[#2670CB] text-white rounded-[8px]"
               >
                 {summaryLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 {summaryLoading ? 'Summarizing...' : 'Summarize'}
-              </Button>
-              <Button 
+              </Button> */}
+              {/* <Button 
                 onClick={handleMakeNotes} 
                 disabled={summaryLoading || notesLoading}
                 className="h-10 px-4 text-sm focus:ring-0 focus:outline-none bg-[#3180DB] hover:bg-[#2670CB] text-white rounded-[8px] font-bold"
               >
                 {notesLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 {notesLoading ? 'Generating Study Notes...' : 'Make Study Notes'}
-              </Button>
+              </Button> */}
             </div>
 
             {/* Chat input form */}
@@ -782,7 +700,7 @@ function Page() {
                   type="text"
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
-                  placeholder="Ask a question about the transcript..."
+                  placeholder="Ask a question"
                   className="flex-grow h-12 text-md focus:ring-0 focus:outline-none border-none rounded-none pl-4 text-black"
                 />
                 <Button 
