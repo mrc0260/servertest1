@@ -1,0 +1,14 @@
+flask
+flask-cors 
+transformers
+google-generativeai
+scikit-learn
+numpy
+langchain
+faiss-cpu
+sentence-transformers
+nltk
+langchain-google-genai
+langchain_huggingface
+langchain_community
+gunicorn 
